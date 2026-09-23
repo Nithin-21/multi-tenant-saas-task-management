@@ -1,9 +1,12 @@
 package com.stask.saastask.user.controller;
 
 import com.stask.saastask.user.dto.CreateUserRequest;
+import com.stask.saastask.user.dto.UpdateUserRequest;
 import com.stask.saastask.user.dto.UserResponse;
 import com.stask.saastask.user.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,5 +26,34 @@ public class UserController {
             @Valid @RequestBody CreateUserRequest request) {
 
         return userService.createUser(request);
+    }
+
+    @GetMapping("/{id}")
+    public UserResponse getUserById(
+            @PathVariable Long id) {
+
+        return userService.getUserById(id);
+    }
+
+    @GetMapping
+    public Page<UserResponse> getAllUsers(Pageable pageable) {
+
+        return userService.getAllUsers(pageable);
+    }
+
+    @PutMapping("/{id}")
+    public UserResponse updateUser(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserRequest request) {
+
+        return userService.updateUser(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(
+            @PathVariable Long id) {
+
+        userService.deleteUser(id);
     }
 }
