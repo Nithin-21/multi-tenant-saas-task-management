@@ -11,19 +11,22 @@ import com.stask.saastask.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
-
+    private final PasswordEncoder passwordEncoder;
     public UserService(
             UserRepository userRepository,
-            OrganizationRepository organizationRepository) {
+            OrganizationRepository organizationRepository,
+              PasswordEncoder passwordEncoder) {
 
-        this.userRepository = userRepository;
-        this.organizationRepository = organizationRepository;
+            this.userRepository = userRepository;
+            this.organizationRepository = organizationRepository;
+            this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponse createUser(CreateUserRequest request) {
@@ -39,7 +42,8 @@ public class UserService {
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+     //   user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()) );
         user.setRole(request.getRole());
         user.setOrganization(organization);
 
